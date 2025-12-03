@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Garden Watering System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🌱 Automatic Garden System</h1>
+      <div class="current-time" id="currentTime">--:--:--</div>
+      <div class="current-date" id="currentDate">Loading...</div>
+    </div>
+    
+    <div class="card">
+      <h2><span class="icon">🎮</span> Manual Controls</h2>
+      <div class="controls">
+        <button class="btn btn-water" onclick="sendCommand('water')">
+          <span class="icon">💧</span> Water Now
+        </button>
+        <button class="btn btn-fertilize" onclick="sendCommand('fertilize')">
+          <span class="icon">🌿</span> Fertilize Now
+        </button>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2><span class="icon">📅</span> Fertilization Schedule</h2>
+      <div class="schedule-form">
+        <div class="input-group">
+          <label for="fertilizeDate">Next Fertilization Date</label>
+          <input type="date" id="fertilizeDate">
+        </div>
+        <div class="input-group">
+          <label for="fertilizeTime">Time</label>
+          <input type="time" id="fertilizeTime" value="08:00">
+        </div>
+        <button class="btn btn-schedule" onclick="setFertilizeSchedule()">
+          <span class="icon">✓</span> Set
+        </button>
+      </div>
+    </div>
+    
+    <div class="card status-card">
+      <h2><span class="icon">📊</span> System Status</h2>
+      <div class="status-indicator">
+        <div class="status-dot" id="statusDot"></div>
+        <div id="status">System Ready</div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
