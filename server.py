@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
 import serial
 import serial.tools.list_ports
 import time
@@ -11,6 +12,8 @@ CORS(app)
 # Arduino connection
 arduino = None
 BAUD_RATE = 9600
+# Force a specific COM port if provided (your board is COM4)
+ARDUINO_PORT = os.environ.get("ARDUINO_PORT", "COM4")
 
 def find_arduino_port():
     """Automatically find Arduino port"""
@@ -21,9 +24,20 @@ def find_arduino_port():
     return None
 
 def connect_arduino():
-    """Connect to Arduino"""
+    """Connect to Arduino, preferring ARDUINO_PORT then fallback to auto-detect"""
     global arduino
     try:
+        # Try explicit port first
+        if ARDUINO_PORT:
+            try:
+                arduino = serial.Serial(ARDUINO_PORT, BAUD_RATE, timeout=1)
+                time.sleep(2)
+                print(f"Connected to Arduino on {ARDUINO_PORT}")
+                return True
+            except Exception as e:
+                print(f"Failed to open {ARDUINO_PORT}: {e}")
+        
+        # Fallback to auto-detect
         port = find_arduino_port()
         if port:
             arduino = serial.Serial(port, BAUD_RATE, timeout=1)
@@ -96,6 +110,7 @@ def set_date():
 def status():
     return jsonify({
         "arduino_connected": arduino is not None and arduino.is_open,
+        "arduino_port": (arduino.port if arduino and arduino.is_open else ARDUINO_PORT),
         "server_time": datetime.now().isoformat()
     })
 
